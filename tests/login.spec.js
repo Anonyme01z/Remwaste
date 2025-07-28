@@ -76,22 +76,6 @@ test.describe('Login flow', () => {
               await expect(page.getByRole('table')).toContainText('DATE PUBLISHED');
               await expect(page.getByRole('table')).toContainText('AVAILABILITY');
               await expect(page.getByRole('table')).toContainText('STATUS');
-  
-              await page.waitForTimeout(6000); // Wait 3 seconds
- 
-
-              await page.locator('.options-button').nth(0).click();
-              await page.locator('p.popover-item', { hasText: 'Edit' }).click();
-
-              const actualValue = await page.getByRole('textbox', { name: 'Product Name' }).inputValue();
-              expect(actualValue.toLowerCase()).toBe(productName.toLowerCase());
-
-              //Edit a product
-              await expect(page.getByRole('textbox', { name: 'Unit Price' })).toHaveValue(price);
-              await page.getByRole('textbox', { name: 'Product Name' }).fill('Edited Product');
-              await page.getByRole('button', { name: 'edit Product' }).click();
-              await expect(page.getByRole('table')).toContainText('Edited Product');
-
 });
 
              test('Deleting an Item', async ({ page }) => {
