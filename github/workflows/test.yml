@@ -1,0 +1,43 @@
+name: Run Automated Tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18
+
+    - name: Install dependencies
+      run: |
+        npm install -g newman newman-reporter-html
+        npm ci
+
+    - name: Run Playwright tests
+      run: |
+        npx playwright install
+        npx playwright test
+
+    - name: Run Postman API tests
+      run: |
+        newman run Remwaste.postman_collection.json \
+          -e Remwaste.postman_environment.json \
+          -r cli,html \
+          --reporter-html-export remwaste-api-report.html
+
+    - name: Upload API Report
+      uses: actions/upload-artifact@v3
+      with:
+        name: api-test-report
+        path: remwaste-api-report.html
