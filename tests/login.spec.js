@@ -2,7 +2,7 @@ const { test, expect } = require('@playwright/test');
 const { faker } = require('@faker-js/faker');
 
 
-test.describe('Login flow', () => {
+test.describe('Login with valid/invalid credentials - Creating a new item. - Editing an existing item. - Deleting an item. - Asserting presence of expected data after actions. ', () => {
   const baseUrl = 'https://tendar-merchant-qa.vercel.app';
 
 
@@ -28,6 +28,7 @@ test.describe('Login flow', () => {
           }
         });
 
+                              // Login with valid Credentials
               await page.getByRole('heading', { name: 'Welcome' });
               await expect(page.locator('[id="__layout"]')).toContainText('Sign in to your account to continue');
               //type the email
@@ -43,7 +44,9 @@ test.describe('Login flow', () => {
               //Assert that User landed on the Dashboard after Sign In
               await page.getByRole('heading', { name: 'Dashboard' })
               await page.getByText('You\'re viewing data from “All')
-                    // ADD an item-(Add a product in this tests)
+                 
+                
+                        // Creating a new item (e.g., a todo/user).
 
             // Generate fake data
               const productName = faker.commerce.productName();
@@ -78,7 +81,7 @@ test.describe('Login flow', () => {
               await expect(page.getByRole('table')).toContainText('STATUS');
 });
 
-             test('Deleting an Item', async ({ page }) => {
+             test('Editing an existing item. - Deleting an item.', async ({ page }) => {
 
               await page.goto(`${baseUrl}/login`, {
                 headers: {
@@ -101,34 +104,37 @@ test.describe('Login flow', () => {
               await page.getByRole('button', { name: 'Sign In' }).click();
 
 
-        await page.waitForTimeout(3000); 
-        await page.getByRole('link', { name: 'Settings' }).click();
-        //Add a bank account
-        await page.getByRole('link', { name: 'Bank Account Management' }).click();
-        await expect(page.locator('[id="__layout"]')).toContainText('Bank Account Management');
-        await expect(page.locator('[id="__layout"]')).toContainText('ADD NEW BANK ACCOUNT');
-        await page.getByRole('button', { name: 'ADD NEW BANK ACCOUNT' }).click();
-        await expect(page.locator('[id="__layout"]')).toContainText('Add new bank');
-        await page.getByText('Enter your new bank account').click();
-        await expect(page.locator('[id="__layout"]')).toContainText('Enter your new bank account details below');
-        await page.getByLabel('Loading...').fill('guaranty');
-        await page.getByRole('option', { name: 'Guaranty Trust Bank' }).click();
-        await page.getByPlaceholder('Enter account number').dblclick();
-        await page.getByPlaceholder('Enter account number').fill('0231508130');
-        await page.getByRole('button', { name: 'Proceed' }).click();
-        await page.waitForTimeout(3000);
-        await expect(page.locator('[id="__layout"]')).toContainText('Guaranty Trust Bank');
-        await expect(page.locator('.plans')).toContainText('Guaranty Trust Bank');
-        //Delete Action - Delete the bank added
-        await page.getByRole('button').nth(3).click();
-        await expect(page.locator('[id="__layout"]')).toContainText('Delete bank account');
-        await expect(page.locator('[id="__layout"]')).toContainText('Are you sure you want to delete this bank account permanently? This process cannot be undone.');
+              await page.waitForTimeout(3000); 
+              await page.getByRole('link', { name: 'Settings' }).click();
         
-        await page.getByRole('button', { name: 'Delete' }).click();
-        //assert that the bank added was deleted
-        await page.waitForTimeout(1000); 
-        await expect(page.locator('.plans')).not.toContainText('Guaranty Trust Bank');
-        await page.getByRole('button').first().click();
-        await page.getByText('Logout').nth(1).click();
+              //Add  and Edit action 
+              await page.getByRole('link', { name: 'Bank Account Management' }).click();
+              await expect(page.locator('[id="__layout"]')).toContainText('Bank Account Management');
+              await expect(page.locator('[id="__layout"]')).toContainText('ADD NEW BANK ACCOUNT');
+              await page.getByRole('button', { name: 'ADD NEW BANK ACCOUNT' }).click();
+              await expect(page.locator('[id="__layout"]')).toContainText('Add new bank');
+              await page.getByText('Enter your new bank account').click();
+              await expect(page.locator('[id="__layout"]')).toContainText('Enter your new bank account details below');
+              await page.getByLabel('Loading...').fill('guaranty');
+              await page.getByRole('option', { name: 'Guaranty Trust Bank' }).click();
+              await page.getByPlaceholder('Enter account number').dblclick();
+              await page.getByPlaceholder('Enter account number').fill('0231508130');
+              await page.getByRole('button', { name: 'Proceed' }).click();
+              await page.waitForTimeout(3000);
+              await expect(page.locator('[id="__layout"]')).toContainText('Guaranty Trust Bank');
+              await expect(page.locator('.plans')).toContainText('Guaranty Trust Bank');
+
+              //Delete Action - Delete the bank added
+              await page.getByRole('button').nth(3).click();
+              await expect(page.locator('[id="__layout"]')).toContainText('Delete bank account');
+              await expect(page.locator('[id="__layout"]')).toContainText('Are you sure you want to delete this bank account permanently? This process cannot be undone.');
+              
+              await page.getByRole('button', { name: 'Delete' }).click();
+              
+              //Editing an existing item. - Deleting an item.
+              await page.waitForTimeout(1000); 
+              await expect(page.locator('.plans')).not.toContainText('Guaranty Trust Bank');
+              await page.getByRole('button').first().click();
+              await page.getByText('Logout').nth(1).click();
       });
 });

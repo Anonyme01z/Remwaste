@@ -1,62 +1,87 @@
-# Remwaste QA Automation Suite
+🧪 Remwaste Automated Testing
 
-This repository contains UI and API automated tests for Remwaste's application workflows.
+This repo contains automated UI and API tests for validating core features as requested in the assesment
 
----
+📁 Project Structure
 
-## 📂 Structure
+Remwaste/
+├── tests/                          # UI Test files (Playwright)
+├── postman/                        # API test collection & environment
+│   ├── Remwaste.postman_collection.json
+│   └── Remwaste.postman_environment.json
+├── .github/workflows/             # GitHub Actions workflow
+│   └── tests.yml
+├── remwaste-api-report.html       # Generated API test reports
+└── README.md
 
-remwaste-tests/
-├── postman/ # Postman API test files
-│ ├── Remwaste.postman_collection.json
-│ └── Remwaste.postman_environment.json
-├── tests/ # Playwright test scripts
-│ ├── login.spec.js
-│ └── ...
-├── playwright.config.js
-├── .github/workflows/test.yml # GitHub Actions workflow for CI
-├── package.json
-├── README.md
+✅ Prerequisites
 
+Before you begin, ensure the following are installed:
 
+- **Node.js (v18 or later)**  
+- **npm**  
+- **Git**
 
----
+📦 Installation & Setup
 
-## 🧪 Test Coverage
+1. Clone the repo:
 
-### UI Automation (Playwright)
-- Login flow
-- Product creation, editing, deletion
-- Bank account addition/deletion
-- UI assertions (form values, visibility, etc.)
+git clone https://github.com/your-username/remwaste.git
+cd remwaste
 
-### API Automation (Postman + Newman)
-- `POST /login`
-- `GET /items`, `GET /items/:id`
-- `POST /items`, `PUT /items/:id`, `DELETE /items/:id`
-- Positive and negative test scenarios
+2. Install Playwright (UI Testing):
 
----
+npm install -D playwright
+npx playwright install
 
-## ▶️ Running Tests Locally
+3. Install Newman (API Testing):
 
-### 1. Install dependencies:
+npm install -g newman
+npm install -g newman-reporter-html
 
-```bash
-npm install -g newman newman-reporter-html
-npm install
+🚀 Running the Tests
 
-### 2. Run UI Tests:
-npx playwright test --headed --debug
+4. 🖥️ UI Tests (Playwright)
 
+npx playwright test -  (Runs the test)
+npx playwright test --headed --debug (run the ui test in debug mode- this helps to see every step)
 
-### Run API Tests:
+ 🌐 API Tests (Postman + Newman)
+
+5. Run this from the root of the repo:
 
 newman run postman/Remwaste.postman_collection.json \
   -e postman/Remwaste.postman_environment.json \
   -r cli,html \
-  --reporter-html-export remwaste-api-report.html
+  --reporter-html-export postman/remwaste-api-report.html
 
-## Then open the HTML report:
 
-open remwaste-api-report.html
+6. 📄 View API Test Report
+
+Open the HTML report in your browser:
+
+open postman/remwaste-api-report.html
+
+
+7. 🧪 Running Tests in CI (GitHub Actions)
+
+Make an edit to the code and push to GitHub:
+
+1. Go to the **Actions** tab of your repo.
+2. Look for `API Tests - Postman + Newman`.
+3. After a successful run, download `remwaste-api-report` from the artifacts section.
+
+ ⚙️ Dependencies Summary
+
+| Tool                  | Purpose                    |
+|-----------------------|----------------------------|
+| Playwright            | UI automation              |
+| Newman                | API automation             |
+| newman-reporter-html  | HTML reports for Newman    |
+| Postman               | Create/test API collections|
+
+📝 Notes
+
+- API tests use [https://fakestoreapi.com](https://fakestoreapi.com) as a sample backend.
+- Ensure your environment file (`Remwaste.postman_environment.json`) is located inside the `postman/` folder.
+- UI tests may require tweaking depending on changes to the Remwaste app’s DOM.
