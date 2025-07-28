@@ -1,10 +1,11 @@
-name: Run Automated Tests
+```yaml
+name: Run Remwaste Tests
 
 on:
   push:
-    branches: [ main ]
+    branches: [ master ]
   pull_request:
-    branches: [ main ]
+    branches: [ master ]
 
 jobs:
   test:
@@ -31,15 +32,13 @@ jobs:
 
     - name: Run Postman API tests
       run: |
-        newman run Remwaste.postman_collection.json \
-          -e Remwaste.postman_environment.json \
+         newman run postman/Remwaste.postman_collection.json \
+          -e postman/Remwaste.postman_environment.json \
           -r cli,html \
-          --reporter-html-export remwaste-api-report.html
+           --reporter-html-export remwaste-api-report.html
 
     - name: Upload API Report
       uses: actions/upload-artifact@v3
       with:
         name: api-test-report
         path: remwaste-api-report.html
-
-
